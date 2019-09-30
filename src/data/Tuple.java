@@ -1,5 +1,7 @@
 package data;
 
+import java.util.Set;
+
 public class Tuple {
 	/** membri attributi **/
 	private Item[] tuple;
@@ -27,8 +29,7 @@ public class Tuple {
 	/** determina la distanza tra la tupla riferita e la tupla corrente **/
 	public double getDistance(Tuple obj) {
 		double dist = 0.0;
-		for (int i = 0; i < getLength(); i++) {
-			System.out.println();
+		for (int i = 0; i < obj.getLength(); i++) {
 			if (tuple[i].getAttribute().getName().equals(obj.get(i).getAttribute().getName()))
 				dist += this.get(i).distance(obj.get(i).getValue());
 		}
@@ -40,13 +41,13 @@ public class Tuple {
 	 * restituisce la media delle distanze tra la tupla corrente e e quelle
 	 * ottenibili dalle righe della matrice in data aventi indice in clusteredData
 	 **/
-	public double avgDistance(Data data, int clusteredData[]) {
+	public double avgDistance(Data data, Set<Integer> clusteredData) {
 		double p = 0.0, sumD = 0.0;
-		for (int i = 0; i < clusteredData.length; i++) {
-			double d = getDistance(data.getItemSet(clusteredData[i]));
+		for (Integer c : clusteredData) {
+			double d = getDistance(data.getItemSet(c));
 			sumD += d;
 		}
-		p = sumD / clusteredData.length;
+		p = sumD / clusteredData.size();
 		return p;
 	}
 

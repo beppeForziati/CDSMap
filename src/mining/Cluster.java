@@ -1,12 +1,16 @@
 package mining;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import data.Data;
 import data.Tuple;
 
-class Cluster {
+class Cluster implements Iterable<Integer>, Comparable<Cluster> {
 	private Tuple centroid;
 
-	private ArraySet clusteredData;
+	private Set<Integer> clusteredData = new HashSet<Integer>();
 
 	/*
 	 * Cluster(){
@@ -16,8 +20,6 @@ class Cluster {
 
 	Cluster(Tuple centroid) {
 		this.centroid = centroid;
-		clusteredData = new ArraySet();
-
 	}
 
 	Tuple getCentroid() {
@@ -32,21 +34,17 @@ class Cluster {
 
 	// verifica se una transazione è clusterizzata nell'array corrente
 	boolean contain(int id) {
-		return clusteredData.get(id);
+		return clusteredData.contains(id);
 	}
 
 	// remove the tuplethat has changed the cluster
 	void removeTuple(int id) {
-		clusteredData.delete(id);
+		clusteredData.remove(id);
 
 	}
 
-	int getSize() {
+	public int getSize() {
 		return clusteredData.size();
-	}
-
-	int[] iterator() {
-		return clusteredData.toArray();
 	}
 
 	@Override
@@ -64,17 +62,29 @@ class Cluster {
 		for (int i = 0; i < centroid.getLength(); i++)
 			str += centroid.get(i) + " ";
 		str += ")\nExamples:\n";
-		int array[] = clusteredData.toArray();
-		for (int i = 0; i < array.length; i++) {
+		for (Integer c : clusteredData) {
 			str += "[";
 			for (int j = 0; j < data.getNumberOfExplanatoryAttributes(); j++)
-				str += data.getValue(array[i], j) + " ";
-			str += "] dist=" + getCentroid().getDistance(data.getItemSet(array[i])) + "\n";
+				str += data.getValue(c, j) + " ";
+			str += "] dist=" + getCentroid().getDistance(data.getItemSet(c)) + "\n";
 
 		}
-		str += "\nAvgDistance=" + getCentroid().avgDistance(data, array);
+		str += "\nAvgDistance=" + getCentroid().avgDistance(data, this.clusteredData);
 		return str;
 
+	}
+
+	@Override
+	public int compareTo(Cluster o) {
+		if (this.getSize() > o.getSize()) {
+			return 1;
+		} else
+			return -1;
+	}
+
+	@Override
+	public Iterator<Integer> iterator() {
+		return clusteredData.iterator();
 	}
 
 }

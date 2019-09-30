@@ -14,7 +14,7 @@ public class MainTest {
 		double radius = 2.0;
 		QTMiner qt = new QTMiner(radius);
 		int numIter = qt.compute(data);
-		System.out.println("ci sono");
+		// System.out.println("ci sono");
 		System.out.println("Number of clusters:" + numIter);
 		System.out.println(qt.getC().toString(data));
 

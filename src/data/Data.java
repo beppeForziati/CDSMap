@@ -1,11 +1,16 @@
 package data;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 public class Data {
 
 	/** membri attributi **/
 	private Object data[][];
 	int numberOfExamples = 14;
-	private Attribute explanatorySet[] = new Attribute[5];
+	private List<Attribute> explanatorySet = new LinkedList<Attribute>();
 
 	/** costruttore **/
 	public Data() {
@@ -14,6 +19,7 @@ public class Data {
 		data[1][0] = "Sunny";
 		data[2][0] = "Overcast";
 		data[3][0] = "Rain";
+		data[4][0] = "Rain";
 		data[5][0] = "Rain";
 		data[6][0] = "Overcast";
 		data[7][0] = "Sunny";
@@ -30,25 +36,25 @@ public class Data {
 		data[3][1] = "Mild";
 		data[4][1] = "Cool";
 		data[5][1] = "Cool";
-		data[6][1] = " Cool";
-		data[7][1] = " Mild";
-		data[8][1] = " Cool";
+		data[6][1] = "Cool";
+		data[7][1] = "Mild";
+		data[8][1] = "Cool";
 		data[9][1] = "Mild";
 		data[10][1] = "Mild";
 		data[11][1] = "Mild";
-		data[12][1] = " Hot";
-		data[13][1] = " Mild";
+		data[12][1] = "Hot";
+		data[13][1] = "Mild";
 
 		data[0][2] = "High";
 		data[1][2] = "High";
 		data[2][2] = "High";
 		data[3][2] = "High";
-		data[4][2] = " Normal";
-		data[5][2] = " Normal";
+		data[4][2] = "Normal";
+		data[5][2] = "Normal";
 		data[6][2] = "Normal";
-		data[7][2] = " High";
+		data[7][2] = "High";
 		data[8][2] = "Normal";
-		data[9][2] = " Normal";
+		data[9][2] = "Normal";
 		data[10][2] = "Normal";
 		data[11][2] = "High";
 		data[12][2] = "Normal";
@@ -84,38 +90,32 @@ public class Data {
 		data[12][4] = "Yes";
 		data[13][4] = "No";
 
-		String Outlookvalues[] = new String[3];
-		Outlookvalues[0] = "Sunny";
-		Outlookvalues[1] = "Overcast";
-		Outlookvalues[2] = "Rain";
+		Set<String> Outlookvalues = new TreeSet<String>();
+		Outlookvalues.add("Sunny");
+		Outlookvalues.add("Overcast");
+		Outlookvalues.add("Rain");
+		this.explanatorySet.add(new DiscreteAttribute("Outlook", 0, Outlookvalues));
 
-		this.explanatorySet[0] = new DiscreteAttribute("Outlook", 0, Outlookvalues);
+		Set<String> Temperaturevalues = new TreeSet<String>();
+		Temperaturevalues.add("Hot");
+		Temperaturevalues.add("Mild");
+		Temperaturevalues.add("Cool");
+		this.explanatorySet.add(new DiscreteAttribute("Temperature", 1, Temperaturevalues));
 
-		String Temperaturevalues[] = new String[3];
-		Temperaturevalues[0] = "Hot";
-		Temperaturevalues[1] = "Mild";
-		Temperaturevalues[2] = "Cool";
+		Set<String> Humidityvalues = new TreeSet<String>();
+		Humidityvalues.add("High");
+		Humidityvalues.add("Normal");
+		this.explanatorySet.add(new DiscreteAttribute("Humidity", 2, Humidityvalues));
 
-		this.explanatorySet[1] = new DiscreteAttribute("Temperature", 1, Temperaturevalues);
+		Set<String> Windvalues = new TreeSet<String>();
+		Windvalues.add("Weak");
+		Windvalues.add("Strong");
+		this.explanatorySet.add(new DiscreteAttribute("Wind", 3, Windvalues));
 
-		String Humidityvalues[] = new String[2];
-		Humidityvalues[0] = "High";
-		Humidityvalues[1] = "Normal";
-
-		this.explanatorySet[2] = new DiscreteAttribute("Humidity", 2, Humidityvalues);
-
-		String Windvalues[] = new String[2];
-		Windvalues[0] = "Weak";
-		Windvalues[1] = "Strong";
-
-		this.explanatorySet[3] = new DiscreteAttribute("Wind", 3, Windvalues);
-
-		String PlayTennisvalues[] = new String[2];
-		PlayTennisvalues[0] = "No";
-		PlayTennisvalues[1] = "Yes";
-
-		this.explanatorySet[4] = new DiscreteAttribute("PlayTennis", 4, PlayTennisvalues);
-
+		Set<String> PlayTennisvalues = new TreeSet<String>();
+		PlayTennisvalues.add("No");
+		PlayTennisvalues.add("Yes");
+		this.explanatorySet.add(new DiscreteAttribute("PlayTennis", 4, PlayTennisvalues));
 	}
 
 	public int getNumberOfExamples() {
@@ -124,14 +124,14 @@ public class Data {
 
 	public int getNumberOfExplanatoryAttributes() {
 
-		return this.explanatorySet.length;
+		return this.explanatorySet.size();
 	}
 
 	public Object getValue(int exampleIndex, int attributeIndex) {
 		return data[exampleIndex][attributeIndex];
 	}
 
-	public Attribute[] getAttributeSchema() {
+	public List<Attribute> getAttributeSchema() {
 		return explanatorySet;
 	}
 
@@ -140,22 +140,22 @@ public class Data {
 	 * Attributo-valore la i-esima riga in data
 	 **/
 	public Tuple getItemSet(int index) {
-		Tuple tuple = new Tuple(explanatorySet.length);
-		for (int i = 0; i < explanatorySet.length; i++)
-			tuple.add(new DiscreteItem(explanatorySet[i], data[index][i]), i);
+		Tuple tuple = new Tuple(explanatorySet.size());
+		for (int i = 0; i < explanatorySet.size(); i++)
+			tuple.add(new DiscreteItem((DiscreteAttribute) explanatorySet.get(i), (String) data[index][i]), i);
 		return tuple;
 	}
 
 	@Override
 	public String toString() {
 		String Stringa = new String();
-		Stringa = "0";
+		Stringa = "";
 		for (int i = 0; i < getNumberOfExplanatoryAttributes(); i++) {
-			Stringa = Stringa + " " + explanatorySet[i] + ",";
+			Stringa = Stringa + " " + explanatorySet.get(i) + ",";
 		}
 		Stringa += "\n";
 
-		for (int i = 1; i < numberOfExamples; i++) {
+		for (int i = 0; i < numberOfExamples; i++) {
 			Stringa += (i) + ",";
 
 			Stringa += "\n";
