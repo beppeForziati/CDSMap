@@ -12,8 +12,12 @@ public class Data {
 	int numberOfExamples = 14;
 	private List<Attribute> explanatorySet = new LinkedList<Attribute>();
 
-	/** costruttore **/
-	public Data() {
+	/**
+	 * costruttore
+	 * 
+	 * @throws EmptyDatasetException
+	 **/
+	public Data() throws EmptyDatasetException {
 		data = new Object[14][5];
 		data[0][0] = "Sunny";
 		data[1][0] = "Sunny";
@@ -116,6 +120,9 @@ public class Data {
 		PlayTennisvalues.add("No");
 		PlayTennisvalues.add("Yes");
 		this.explanatorySet.add(new DiscreteAttribute("PlayTennis", 4, PlayTennisvalues));
+
+		if (data == null)
+			throw new EmptyDatasetException();
 	}
 
 	public int getNumberOfExamples() {

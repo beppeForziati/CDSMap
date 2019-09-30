@@ -15,6 +15,10 @@ public class ClusterSet implements Iterable<Cluster> {
 
 	}
 
+	public int getSize() {
+		return C.size();
+	}
+
 	/** metodo di aggiunta del cluster **/
 	void add(Cluster c) {
 		C.add(c);

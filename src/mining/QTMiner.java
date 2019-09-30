@@ -19,8 +19,12 @@ public class QTMiner {
 		return C;
 	}
 
-	/** esegue l'agoritmo QT **/
-	public int compute(Data data) {
+	/**
+	 * esegue l'agoritmo QT
+	 * 
+	 * @throws ClusteringRadiusException
+	 **/
+	public int compute(Data data) throws ClusteringRadiusException {
 		int numclusters = 0;
 		boolean isClustered[] = new boolean[data.getNumberOfExamples()];
 		for (int i = 0; i < isClustered.length; i++)
@@ -40,6 +44,8 @@ public class QTMiner {
 
 			countClustered += c.getSize();
 		}
+		if (C.getSize() == 1)
+			throw new ClusteringRadiusException();
 		return numclusters;
 	}
 
