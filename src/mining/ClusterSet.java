@@ -1,12 +1,17 @@
 package mining;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 import data.Data;
 
-public class ClusterSet implements Iterable<Cluster> {
+public class ClusterSet implements Iterable<Cluster>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8617035429278316415L;
 	/** attributi membri **/
 	private Set<Cluster> C = new TreeSet<Cluster>();
 
@@ -31,7 +36,15 @@ public class ClusterSet implements Iterable<Cluster> {
 	/** riscrittura della stampa **/
 	@Override
 	public String toString() {
-		return C.toString();
+		String str = "";
+		int i = 0;
+		for (Cluster cc : C) {
+			if (cc != null) {
+				str += i + ":" + cc.toString() + "\n";
+			}
+			i++;
+		}
+		return str;
 	}
 
 	public String toString(Data data) {

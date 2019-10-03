@@ -34,20 +34,20 @@ public class Data {
 		data[12][0] = "Overcast";
 		data[13][0] = "Rain";
 
-		data[0][1] = "Hot";
-		data[1][1] = "Hot";
-		data[2][1] = "Hot";
-		data[3][1] = "Mild";
-		data[4][1] = "Cool";
-		data[5][1] = "Cool";
-		data[6][1] = "Cool";
-		data[7][1] = "Mild";
-		data[8][1] = "Cool";
-		data[9][1] = "Mild";
-		data[10][1] = "Mild";
-		data[11][1] = "Mild";
-		data[12][1] = "Hot";
-		data[13][1] = "Mild";
+		data[0][1] = new Double(30.3);
+		data[1][1] = new Double(30.3);
+		data[2][1] = new Double(30);
+		data[3][1] = new Double(13);
+		data[4][1] = new Double(0);
+		data[5][1] = new Double(0);
+		data[6][1] = new Double(0.1);
+		data[7][1] = new Double(13);
+		data[8][1] = new Double(0.1);
+		data[9][1] = new Double(12);
+		data[10][1] = new Double(12.5);
+		data[11][1] = new Double(12.5);
+		data[12][1] = new Double(29.21);
+		data[13][1] = new Double(12.5);
 
 		data[0][2] = "High";
 		data[1][2] = "High";
@@ -100,11 +100,7 @@ public class Data {
 		Outlookvalues.add("Rain");
 		this.explanatorySet.add(new DiscreteAttribute("Outlook", 0, Outlookvalues));
 
-		Set<String> Temperaturevalues = new TreeSet<String>();
-		Temperaturevalues.add("Hot");
-		Temperaturevalues.add("Mild");
-		Temperaturevalues.add("Cool");
-		this.explanatorySet.add(new DiscreteAttribute("Temperature", 1, Temperaturevalues));
+		this.explanatorySet.add(new ContinuousAttribute("Temperature", 1, 0, 30.3));
 
 		Set<String> Humidityvalues = new TreeSet<String>();
 		Humidityvalues.add("High");
@@ -149,7 +145,12 @@ public class Data {
 	public Tuple getItemSet(int index) {
 		Tuple tuple = new Tuple(explanatorySet.size());
 		for (int i = 0; i < explanatorySet.size(); i++)
-			tuple.add(new DiscreteItem((DiscreteAttribute) explanatorySet.get(i), (String) data[index][i]), i);
+			if (explanatorySet.get(i) instanceof ContinuousAttribute) {
+				tuple.add(new ContinuousItem(explanatorySet.get(i), data[index][i]), i);
+			} else {
+				tuple.add(new DiscreteItem((DiscreteAttribute) explanatorySet.get(i), (String) data[index][i]), i);
+
+			}
 		return tuple;
 	}
 

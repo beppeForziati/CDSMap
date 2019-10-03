@@ -1,10 +1,16 @@
 package data;
 
-public abstract class Item {
+import java.io.Serializable;
 
+public abstract class Item implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7083356003943992182L;
 	/** membri attributi **/
-	Attribute attribute;
-	Object value;
+	private Attribute attribute;
+	private Object value;
 
 	/** costruttore **/
 	Item(Attribute attribute, Object value) {

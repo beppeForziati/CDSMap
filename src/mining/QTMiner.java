@@ -1,17 +1,64 @@
 package mining;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import data.Data;
 
-public class QTMiner {
+public class QTMiner implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6178352022036478469L;
 	// attributi
 	private ClusterSet C;
 	private double radius;
+
+	/** costruttore serializzato **/
+	public QTMiner(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+		ObjectInputStream input = null;
+		try {
+			input = new ObjectInputStream(new FileInputStream(fileName));
+			C = (ClusterSet) input.readObject();
+			System.out.println(C);
+		} catch (FileNotFoundException e) {
+			System.out.println(fileName + " (IMpossibile trovare il file specificato!)");
+		}
+	}
 
 	/** costruttore **/
 	public QTMiner(double radius) {
 		C = new ClusterSet();
 		this.radius = radius;
+	}
+
+	public void salva(String fileName) throws FileNotFoundException, IOException {
+		// questo metodo funziona senza l'interfaccia serializable(???)
+
+		/*
+		 * PrintWriter outputStream = null; try { outputStream = new
+		 * PrintWriter(fileName); } catch (FileNotFoundException e) {
+		 * System.out.println("errore nell'apertura del file " + fileName);
+		 * System.exit(0); } outputStream.println(C); outputStream.close();
+		 * System.out.println("ClusterSet inserito nel file " + fileName);
+		 */
+
+		// questo metodo funziona solo con l'interfaccia ma scrive solo sequenze di //
+		// numeri e caratteri
+		ObjectOutputStream output = null;
+		try {
+			output = new ObjectOutputStream(new FileOutputStream(fileName));
+			output.writeObject(C);
+			output.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("errore nell'apertura del file " + fileName);
+		}
 	}
 
 	/** restituisce C **/

@@ -10,6 +10,7 @@ public class DiscreteItem extends Item {
 	/** implementazione metodo astratto **/
 	@Override
 	double distance(Object a) {
+
 		// System.out.println(getValue());
 		if (getValue().equals(a))
 			return 0;

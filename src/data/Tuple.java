@@ -1,14 +1,20 @@
 package data;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class Tuple {
+public class Tuple implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1128862453280410765L;
 	/** membri attributi **/
 	private Item[] tuple;
 
 	/** costruttore **/
 	public Tuple(int size) {
-		tuple = new DiscreteItem[size];
+		tuple = new Item[size];
 	}
 
 	/** restituisce la lunghezza della tupla **/

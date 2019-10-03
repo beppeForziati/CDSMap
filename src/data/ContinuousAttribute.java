@@ -1,13 +1,14 @@
 package data;
 
-public class ContinuosAttribute extends Attribute {
+@SuppressWarnings("serial")
+public class ContinuousAttribute extends Attribute {
 
 	/** membri attributi **/
-	double max;
-	double min;
+	private double max;
+	private double min;
 
 	/** costruttore **/
-	ContinuosAttribute(String name, int index, double max, double min) {
+	public ContinuousAttribute(String name, int index, double min, double max) {
 		super(name, index);
 		this.max = max;
 		this.min = min;
