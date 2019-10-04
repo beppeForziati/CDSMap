@@ -28,7 +28,7 @@ public class QTMiner implements Serializable {
 			C = (ClusterSet) input.readObject();
 			System.out.println(C);
 		} catch (FileNotFoundException e) {
-			System.out.println(fileName + " (IMpossibile trovare il file specificato!)");
+			System.out.println(fileName + " (Impossibile trovare il file specificato!)");
 		}
 	}
 

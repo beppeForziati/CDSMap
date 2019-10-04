@@ -2,9 +2,12 @@ package mainTest;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import data.Data;
 import data.EmptyDatasetException;
+import database.DatabaseConnectionException;
+import database.EmptySetException;
 import keyboardinput.Keyboard;
 import mining.ClusteringRadiusException;
 import mining.QTMiner;
@@ -34,7 +37,8 @@ public class MainTest {
 
 	}
 
-	public static void main(String[] args) throws EmptyDatasetException {
+	public static void main(String[] args) throws EmptyDatasetException, SQLException, EmptySetException,
+			ClassNotFoundException, DatabaseConnectionException {
 
 		MainTest main = new MainTest();
 		do {
@@ -53,7 +57,7 @@ public class MainTest {
 				}
 				break;
 			case 2:
-				Data data = new Data();
+				Data data = new Data("playtennis");
 				System.out.println(data);
 				char answer = 'y';
 				do {

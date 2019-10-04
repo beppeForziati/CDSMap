@@ -1,14 +1,24 @@
 package data;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import database.DatabaseConnectionException;
+import database.DbAccess;
+import database.EmptySetException;
+import database.Example;
+
 public class Data {
 
 	/** membri attributi **/
-	private List<Example> data=new ArrayList<Example>();
+	private List<Example> data = new ArrayList<Example>();
 	int numberOfExamples = 14;
 	private List<Attribute> explanatorySet = new LinkedList<Attribute>();
 
@@ -16,10 +26,13 @@ public class Data {
 	 * costruttore
 	 * 
 	 * @throws EmptyDatasetException
+	 * @throws EmptySetException
+	 * @throws SQLException
+	 * @throws DatabaseConnectionException
+	 * @throws ClassNotFoundException
 	 **/
-	public Data(String table) throws EmptyDatasetException {
-		table.
-		
+	public Data(String table) throws EmptyDatasetException, SQLException, EmptySetException, ClassNotFoundException,
+			DatabaseConnectionException {
 
 		Set<String> Outlookvalues = new TreeSet<String>();
 		Outlookvalues.add("Sunny");
@@ -46,6 +59,40 @@ public class Data {
 
 		if (data == null)
 			throw new EmptyDatasetException();
+
+		Statement statement;
+
+		String query = "select * FROM " + table;
+		DbAccess db = new DbAccess();
+		db.initConnection();
+		statement = db.getConnection().createStatement();
+		ResultSet rs = statement.executeQuery(query);
+		ResultSetMetaData rsmd = rs.getMetaData();
+
+		try {
+			while (rs.next()) {
+				Example currentTuple = new Example();
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					if (rsmd.getColumnTypeName(i + 1).equals("DOUBLE")) {
+						currentTuple.add(rs.getDouble(i + 1));
+					} else {
+						currentTuple.add(rs.getString(i + 1));
+					}
+				}
+				data.add(currentTuple);
+			}
+			rs.close();
+			statement.close();
+
+		} catch (SQLException SQLexc) {
+			SQLexc.printStackTrace();
+		}
+		if (data.size() == 0) {
+			throw new EmptyDatasetException();
+		}
+		if (explanatorySet.isEmpty()) {
+			throw new EmptyDatasetException();
+		}
 	}
 
 	public int getNumberOfExamples() {
@@ -58,7 +105,8 @@ public class Data {
 	}
 
 	public Object getValue(int exampleIndex, int attributeIndex) {
-		return data[exampleIndex][attributeIndex];
+		return data.get(exampleIndex).get(attributeIndex);
+		// return data[exampleIndex][attributeIndex];
 	}
 
 	public List<Attribute> getAttributeSchema() {
@@ -73,9 +121,10 @@ public class Data {
 		Tuple tuple = new Tuple(explanatorySet.size());
 		for (int i = 0; i < explanatorySet.size(); i++)
 			if (explanatorySet.get(i) instanceof ContinuousAttribute) {
-				tuple.add(new ContinuousItem(explanatorySet.get(i), data[index][i]), i);
+				tuple.add(new ContinuousItem(explanatorySet.get(i), this.getValue(index, i)), i);
 			} else {
-				tuple.add(new DiscreteItem((DiscreteAttribute) explanatorySet.get(i), (String) data[index][i]), i);
+				tuple.add(new DiscreteItem((DiscreteAttribute) explanatorySet.get(i), (String) this.getValue(index, i)),
+						i);
 
 			}
 		return tuple;
@@ -95,7 +144,7 @@ public class Data {
 
 			Stringa += "\n";
 			for (int j = 0; j < getNumberOfExplanatoryAttributes(); j++) {
-				Stringa += data[i][j] + ",";
+				Stringa += this.getValue(i, j) + ",";
 			}
 			Stringa += "\n";
 
