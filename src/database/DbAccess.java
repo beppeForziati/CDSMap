@@ -23,10 +23,12 @@ public class DbAccess {
 
 		try {
 			Class.forName(DRIVER_CLASS_NAME);
+			conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE,USER_ID,PASSWORD);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found!\n");
+		} catch (SQLException Cex) {
+			System.out.println("Connection Failed!\n");
 		}
-		conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE,USER_ID,PASSWORD);
 	}
 
 	public Connection getConnection() {
