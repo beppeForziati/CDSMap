@@ -9,7 +9,7 @@ public class DbAccess {
 	private String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
 	private final String DBMS = "jdbc:mysql";
 	private final String SERVER = "localhost";
-	private final String DATABASE = "MapDB?useSSL=false";
+	private final String DATABASE = "MapDB";
 	private final String PORT = "3306";
 	private final String USER_ID = "MapUser";
 	private final String PASSWORD = "map";
@@ -23,7 +23,7 @@ public class DbAccess {
 
 		try {
 			Class.forName(DRIVER_CLASS_NAME);
-			conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE,USER_ID,PASSWORD);
+			conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE, USER_ID, PASSWORD);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found!\n");
 		} catch (SQLException Cex) {

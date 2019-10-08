@@ -57,7 +57,8 @@ public class MainTest {
 				}
 				break;
 			case 2:
-				Data data = new Data("playtennis");
+				System.out.println("inserire nome della tabella:");
+				Data data = new Data(Keyboard.readString());
 				System.out.println(data);
 				char answer = 'y';
 				do {

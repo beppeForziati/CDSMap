@@ -26,7 +26,7 @@ public class QTMiner implements Serializable {
 		try {
 			input = new ObjectInputStream(new FileInputStream(fileName));
 			C = (ClusterSet) input.readObject();
-			System.out.println(C);
+			input.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(fileName + " (Impossibile trovare il file specificato!)");
 		}
@@ -104,7 +104,6 @@ public class QTMiner implements Serializable {
 	private Cluster buildCandidateCluster(Data data, boolean[] isClustered) {
 		Cluster MAX = null;
 		for (int i = 0; i < isClustered.length; i++) {
-			// System.out.println(i + " ");
 			Cluster c = new Cluster(data.getItemSet(i));
 			if (!isClustered[i]) {
 				for (int j = 0; j < isClustered.length; j++) {
@@ -118,10 +117,12 @@ public class QTMiner implements Serializable {
 			if (MAX == null || c.getSize() > MAX.getSize()) {
 				MAX = c;
 			}
-			// System.out.println("sono qui" + i + " " + c.getSize());
-
-			// System.out.println(" " + MAX.getSize());
 		}
 		return MAX;
+	}
+
+	@Override
+	public String toString() {
+		return C.toString();
 	}
 }

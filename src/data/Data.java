@@ -1,9 +1,6 @@
 package data;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +11,13 @@ import database.DatabaseConnectionException;
 import database.DbAccess;
 import database.EmptySetException;
 import database.Example;
+import database.TableData;
 
 public class Data {
 
 	/** membri attributi **/
 	private List<Example> data = new ArrayList<Example>();
-	int numberOfExamples = 14;
+	// int numberOfExamples = 14; fare riferimento al metodo getNumberOfExamples
 	private List<Attribute> explanatorySet = new LinkedList<Attribute>();
 
 	/**
@@ -33,6 +31,14 @@ public class Data {
 	 **/
 	public Data(String table) throws EmptyDatasetException, SQLException, EmptySetException, ClassNotFoundException,
 			DatabaseConnectionException {
+
+		DbAccess db = new DbAccess();
+		db.initConnection();
+		TableData td = new TableData(db);
+
+		data = td.getDistinctTransazioni(table);
+
+		// System.out.println(data.size());
 
 		Set<String> Outlookvalues = new TreeSet<String>();
 		Outlookvalues.add("Sunny");
@@ -60,33 +66,6 @@ public class Data {
 		if (data == null)
 			throw new EmptyDatasetException();
 
-		Statement statement;
-
-		String query = "select * FROM " + table;
-		DbAccess db = new DbAccess();
-		db.initConnection();
-		statement = db.getConnection().createStatement();
-		ResultSet rs = statement.executeQuery(query);
-		ResultSetMetaData rsmd = rs.getMetaData();
-
-		try {
-			while (rs.next()) {
-				Example currentTuple = new Example();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					if (rsmd.getColumnTypeName(i + 1).equals("DOUBLE")) {
-						currentTuple.add(rs.getDouble(i + 1));
-					} else {
-						currentTuple.add(rs.getString(i + 1));
-					}
-				}
-				data.add(currentTuple);
-			}
-			rs.close();
-			statement.close();
-
-		} catch (SQLException SQLexc) {
-			SQLexc.printStackTrace();
-		}
 		if (data.size() == 0) {
 			throw new EmptyDatasetException();
 		}
@@ -95,8 +74,10 @@ public class Data {
 		}
 	}
 
+	// utilizzo data.size al posto di getNumberOfExsamples poichè con data.size
+	// ritorna la dimensione della tabella
 	public int getNumberOfExamples() {
-		return this.numberOfExamples;
+		return data.size();
 	}
 
 	public int getNumberOfExplanatoryAttributes() {
@@ -139,7 +120,7 @@ public class Data {
 		}
 		Stringa += "\n";
 
-		for (int i = 0; i < numberOfExamples; i++) {
+		for (int i = 0; i < data.size(); i++) {
 			Stringa += (i) + ",";
 
 			Stringa += "\n";
